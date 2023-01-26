@@ -31,7 +31,7 @@ Mappings:
      ImageId: ami-059f4aad319ff1bc3
 
 Conditions:
-  CreateEC2: !Equals [ !Ref Environment, 'dev']
+  CreateEC2: !Equals [!Ref Environment, 'dev']
 
 Resources:
   MyVPC:
@@ -45,7 +45,7 @@ Resources:
 
   MyInstanceEC2:
     Type: AWS::EC2::Instance
-    Conditional: 
+    Conditional: CreateEC2
     Properties:
       VpcId: 
         Ref: MyVPC
