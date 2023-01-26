@@ -6,7 +6,7 @@ Parameters:
     Type: String
     Default: default
     AllowedValues:
-      - tenancy
+      - dedicated
       - default
 
   Environment:
@@ -22,13 +22,13 @@ Mappings:
   EnvironmentMap:
     dev:
       InstanceType: t2.micro
-      ImageId: ami-059f4aad319ff1bc3
+      ImageId: ami-0b5eea76982371e91
     prod:
       InstanceType: t2.micro
-      ImageId: ami-059f4aad319ff1bc3
+      ImageId: ami-0b5eea76982371e91
     test:
      InstanceType: m3.medium
-     ImageId: ami-059f4aad319ff1bc3
+     ImageId: ami-0b5eea76982371e91
 
 Conditions:
   CreateEC2: !Equals [!Ref Environment, 'dev']
@@ -36,16 +36,14 @@ Conditions:
 Resources:
   MyVPC:
     Type: AWS::EC2::VPC
-    DependsOn:
-    - ResourceDependsOn
     Properties:
-      CidrlBlock: '10.0.0.0/16'
-      InstanceType: 
+      CidrBlock: '10.0.0.0/16'
+      InstanceTenancy: 
         Ref: TypeVPC
 
   MyInstanceEC2:
     Type: AWS::EC2::Instance
-    Conditional: CreateEC2
+    Condition: CreateEC2
     Properties:
       VpcId: 
         Ref: MyVPC
@@ -55,7 +53,7 @@ Resources:
         - ImageId
       AvailabilityZone: !Select 
         - 0
-        - Fn::GetAZs: !Ref AWS::Region'
+        - Fn::GetAZs: !Ref 'AWS::Region'
   
   PublicSubnet:
     Type: AWS::EC2::Subnet
@@ -91,9 +89,9 @@ Resources:
                   FromPort: 80
                   ToPort: 80
 
-OutPuts:
+Outputs:
   VpcId:
-    Description: 'Id Vpc'
+    Description: Value of Id
     Value: 
       Ref: MyVPC
      
