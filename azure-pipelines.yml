@@ -1,0 +1,7 @@
+trigger:
+  -main
+
+steps
+  -task
+   displayName: 'Hello'
+   inputs:
